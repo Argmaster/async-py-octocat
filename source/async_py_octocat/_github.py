@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-from typing import Any, Awaitable, Generator, Optional
+from typing import Any, Generator, Optional
 
 import aiohttp
-from typing_extensions import Self
 
 from ._rest import GitHubSession, User
 
 
-class GitHub(Awaitable[Self]):
+class GitHub:
     """Async GitHub client.
 
     After instantiation this object should (but doesn't have to) be
