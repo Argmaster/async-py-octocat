@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from typing import Any, Generator, Optional
+from types import TracebackType
+from typing import Optional, Type
 
 import aiohttp
 
@@ -19,6 +20,7 @@ class GitHub:
     token: str
     token_auth: bool
     _user: Optional[User]
+    _session: GitHubSession
 
     def __init__(
         self, username: str, token: str, token_auth: bool = False
@@ -27,24 +29,9 @@ class GitHub:
         self.token = token
         self.token_auth = token_auth
         self._user = None
+        self._session = self._get_session()
 
-    def __await__(self) -> Generator[Any, None, GitHub]:
-        """Verifies credentials by downloading authenticated user profile data.
-
-        Returns
-        -------
-        Coroutine[Any, Any, GitHub]
-            self
-        """
-        return self._fetch_current_user().__await__()  # type: ignore
-
-    async def _fetch_current_user(self) -> GitHub:
-        async with self._session as session:
-            self._user = await session.get_user()
-        return self
-
-    @property
-    def _session(self) -> GitHubSession:
+    def _get_session(self) -> GitHubSession:
         if self.token_auth:
             return GitHubSession(
                 headers={
@@ -60,6 +47,22 @@ class GitHub:
                 headers={"Accept": "application/vnd.github.v3+json"},
             )
 
+    async def __aenter__(self) -> GitHub:
+        await self._session.__aenter__()
+        await self._fetch_current_user()
+        return self
+
+    async def _fetch_current_user(self) -> None:
+        self._user = await self._session.get_user()
+
+    async def __aexit__(
+        self,
+        exc_type: Type[BaseException],
+        exc_val: BaseException,
+        exc_tb: TracebackType,
+    ) -> None:
+        return await self._session.__aexit__(exc_type, exc_val, exc_tb)
+
     async def user(self, username: Optional[str] = None) -> User:
         if username is None:
             if self._user is None:
@@ -67,6 +70,5 @@ class GitHub:
             assert self._user is not None
             return self._user
         else:
-            async with self._session as session:
-                user = await session.get_user(username)
+            user = await self._session.get_user(username)
             return user

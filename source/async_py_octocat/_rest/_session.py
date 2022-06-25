@@ -5,12 +5,12 @@ from typing import Any, Type
 
 from aiohttp import ClientSession
 
-from ._mixin import UserAccessMixin
+from ._mixin import RepoAccessMixin, UserAccessMixin
 
 __all__ = ["GitHubSession"]
 
 
-class GitHubSession(UserAccessMixin):
+class GitHubSession(UserAccessMixin, RepoAccessMixin):
 
     session: ClientSession
 

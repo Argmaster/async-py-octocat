@@ -4,6 +4,7 @@ from typing import Optional
 
 from aiohttp import ClientSession
 
+from .._constants import BASE_URL
 from .._models import User
 from ..exceptions import (
     Forbidden403,
@@ -20,11 +21,9 @@ class UserAccessMixin:
 
     async def get_user(self, username: Optional[str] = None) -> User:
         if username is None:
-            return await self._get_user("https://api.github.com/user")
+            return await self._get_user(f"{BASE_URL}/user")
         else:
-            return await self._get_user(
-                f"https://api.github.com/users/{username}"
-            )
+            return await self._get_user(f"{BASE_URL}/users/{username}")
 
     async def _get_user(self, url: str) -> User:
         async with self.session.get(url) as response:

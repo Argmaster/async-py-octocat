@@ -1,8 +1,9 @@
 import pytest
 
-from async_py_octocat import GitHub, Plan, User
+from async_py_octocat import GitHub, Plan, Repository, User
 
 ALT_USER: str = "Argmaster"
+REPO_NAME: str
 
 
 class TestGitHub:
@@ -29,8 +30,10 @@ class TestGitHub:
     async def test_with_token_full_basic_auth(
         self, gh_username: str, gh_token_full: str, use_token_auth: bool
     ) -> None:
-        client = await GitHub(gh_username, gh_token_full, use_token_auth)
-        user = await client.user()
+        async with GitHub(
+            gh_username, gh_token_full, use_token_auth
+        ) as client:
+            user = await client.user()
 
         assert isinstance(user, User)
         self.check_user_private_fields_populated(user)
@@ -40,8 +43,10 @@ class TestGitHub:
     async def test_with_token_limited_basic_auth(
         self, gh_username: str, gh_token_limited: str, use_token_auth: bool
     ) -> None:
-        client = await GitHub(gh_username, gh_token_limited, use_token_auth)
-        user = await client.user()
+        async with GitHub(
+            gh_username, gh_token_limited, use_token_auth
+        ) as client:
+            user = await client.user()
 
         assert isinstance(user, User)
         self.check_user_private_fields_empty(user)
@@ -50,8 +55,8 @@ class TestGitHub:
     async def test_get_auth_user_no_credential_validation(
         self, gh_username: str, gh_token_full: str
     ):
-        client = GitHub(gh_username, gh_token_full)
-        user = await client.user()
+        async with GitHub(gh_username, gh_token_full) as client:
+            user = await client.user()
 
         assert isinstance(user, User)
         self.check_user_private_fields_populated(user)
@@ -60,8 +65,16 @@ class TestGitHub:
     async def test_get_arbitrary_user(
         self, gh_username: str, gh_token_full: str
     ):
-        client = GitHub(gh_username, gh_token_full)
-        user = await client.user(ALT_USER)
+        async with GitHub(gh_username, gh_token_full) as client:
+            user = await client.user(ALT_USER)
 
         assert isinstance(user, User)
         self.check_user_private_fields_empty(user)
+
+    @pytest.mark.asyncio()
+    async def test_get_user_repo(self, gh_username: str, gh_token_full: str):
+        async with GitHub(gh_username, gh_token_full) as client:
+            user = await client.user(ALT_USER)
+            repo = await user.repo("async-py-octocat")
+
+        assert isinstance(repo, Repository), repo
