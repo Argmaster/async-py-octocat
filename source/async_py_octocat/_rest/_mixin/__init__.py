@@ -1,5 +1,5 @@
 from __future__ import annotations
 
-from ._current_user import CurrentUserMixin
+from ._user_access import UserAccessMixin
 
-__all__ = ["CurrentUserMixin"]
+__all__ = ["UserAccessMixin"]

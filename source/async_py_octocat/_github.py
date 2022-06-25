@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from types import TracebackType
-from typing import Any, Awaitable, Generator, Optional, Type
+from typing import Any, Awaitable, Generator, Optional
 
 import aiohttp
 from typing_extensions import Self
@@ -19,12 +18,16 @@ class GitHub(Awaitable[Self]):
 
     username: str
     token: str
-    user: Optional[User]
+    token_auth: bool
+    _user: Optional[User]
 
-    def __init__(self, username: str, token: str) -> None:
+    def __init__(
+        self, username: str, token: str, token_auth: bool = False
+    ) -> None:
         self.username = username
         self.token = token
-        self.user = None
+        self.token_auth = token_auth
+        self._user = None
 
     def __await__(self) -> Generator[Any, None, GitHub]:
         """Verifies credentials by downloading authenticated user profile data.
@@ -34,26 +37,37 @@ class GitHub(Awaitable[Self]):
         Coroutine[Any, Any, GitHub]
             self
         """
-        return self._check_credentials().__await__()  # type: ignore
+        return self._fetch_current_user().__await__()  # type: ignore
 
-    async def _check_credentials(self) -> GitHub:
+    async def _fetch_current_user(self) -> GitHub:
         async with self._session as session:
-            self.user = await session.get_current_user()
+            self._user = await session.get_user()
         return self
 
     @property
     def _session(self) -> GitHubSession:
-        return GitHubSession(
-            auth=aiohttp.BasicAuth(login=self.username, password=self.token)
-        )
+        if self.token_auth:
+            return GitHubSession(
+                headers={
+                    "Accept": "application/vnd.github.v3+json",
+                    "Authorization": f"token {self.token}",
+                },
+            )
+        else:
+            return GitHubSession(
+                auth=aiohttp.BasicAuth(
+                    login=self.username, password=self.token
+                ),
+                headers={"Accept": "application/vnd.github.v3+json"},
+            )
 
-    def __aenter__(self) -> None:
-        pass  # pragma: no cover
-
-    def __aexit__(
-        self,
-        exc_type: Type[BaseException],
-        exc_val: BaseException,
-        exc_tb: TracebackType,
-    ) -> None:
-        pass  # pragma: no cover
+    async def user(self, username: Optional[str] = None) -> User:
+        if username is None:
+            if self._user is None:
+                await self._fetch_current_user()
+            assert self._user is not None
+            return self._user
+        else:
+            async with self._session as session:
+                user = await session.get_user(username)
+            return user

@@ -9,6 +9,9 @@ __all__ = ["RestResponse"]
 
 
 class RestResponse(BaseModel):
+
+    """Base class for API endpoint response wrappers."""
+
     class Config:
         anystr_strip_whitespace: bool = True
         validate_all: bool = True

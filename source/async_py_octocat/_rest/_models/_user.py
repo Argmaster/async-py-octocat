@@ -1,16 +1,28 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Optional
+from typing import TYPE_CHECKING, Optional
 
 from pydantic import Field, HttpUrl
+
+if TYPE_CHECKING:
+    from .._session import GitHubSession
 
 from ._plan import Plan
 from ._response import RestResponse
 
+__all__ = ["User"]
+
 
 class User(RestResponse):
 
+    """User profile data wrapper & validator.
+
+    Thanks to BaseModel inheritance, JSON data acquired from github api
+    endpoint can be automatically dispatched and validated.
+    """
+
+    # public profile information:
     login: str
     id: int  # noqa: A003
     node_id: str
@@ -43,6 +55,7 @@ class User(RestResponse):
     following: int
     created_at: datetime
     updated_at: datetime
+    # private profile information:
     private_gists: Optional[int] = Field(default=None)
     total_private_repos: Optional[int] = Field(default=None)
     owned_private_repos: Optional[int] = Field(default=None)
@@ -50,3 +63,5 @@ class User(RestResponse):
     collaborators: Optional[int] = Field(default=None)
     two_factor_authentication: Optional[bool] = Field(default=None)
     plan: Optional[Plan] = Field(default=None)
+    # internal library attributes
+    _session: Optional["GitHubSession"] = Field(default=None, repr=False)

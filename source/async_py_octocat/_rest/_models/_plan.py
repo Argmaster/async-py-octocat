@@ -6,6 +6,9 @@ __all__ = ["Plan"]
 
 
 class Plan(RestResponse):
+    """Plan (Sometimes available with user profile data) wrapper &
+    validator."""
+
     name: str
     space: int
     collaborators: int
