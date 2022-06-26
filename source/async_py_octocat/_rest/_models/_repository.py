@@ -6,7 +6,9 @@ from typing import TYPE_CHECKING, List, Optional
 
 from pydantic import HttpUrl
 
+from ._license import License
 from ._organization import Organization
+from ._perms import Permissions
 from ._response import RestResponse
 
 if TYPE_CHECKING:
@@ -16,21 +18,6 @@ if TYPE_CHECKING:
 class Visibility(Enum):
     PRIVATE = "private"
     PUBLIC = "public"
-
-
-class Permissions(RestResponse):
-    pull: bool
-    push: bool
-    admin: bool
-
-
-class License(RestResponse):
-    key: str
-    name: str
-    url: HttpUrl
-    spdx_id: str
-    node_id: str
-    html_url: Optional[HttpUrl]
 
 
 class Repository(RestResponse):

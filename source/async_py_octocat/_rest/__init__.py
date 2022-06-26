@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from . import exceptions
-from ._models import Organization, Plan, Repository, User
+from ._models import License, Organization, Permissions, Plan, Repository, User
 from ._session import GitHubSession
 
 __all__ = [
@@ -11,4 +11,6 @@ __all__ = [
     "exceptions",
     "Repository",
     "Organization",
+    "License",
+    "Permissions",
 ]

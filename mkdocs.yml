@@ -16,10 +16,11 @@ theme:
         name: Switch to light mode
 nav:
   - Home: index.md
-  - Quantum Oscilator:
-      - Introduction: "quantum_oscilator/introduction.md"
-      - architecture: "quantum_oscilator/architecture.md"
-      - params: "quantum_oscilator/params.md"
+  - Quick Start: quickstart.md
+  - Features Status: features_status.md
+  - Reference:
+      - class GitHub: "reference/github.md"
+      - class User: "reference/user.md"
   - Development:
       - Feature flow: "develop/feature.md"
       - Tox basics: "develop/tox_basics.md"
