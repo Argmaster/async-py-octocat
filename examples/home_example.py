@@ -16,6 +16,11 @@ async def main():
         other_user = await client.user("Other User name")
         print(other_user)
 
+        # to download repository owned by some user you can use
+        # previously acquired User object
+        repo = await currently_authenticated.repository("repo_name")
+        print(repo)
+
 
 if __name__ == "__main__":
     asyncio.run(main())
