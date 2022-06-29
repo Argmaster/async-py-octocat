@@ -1,22 +1,20 @@
 from __future__ import annotations
 
 from datetime import datetime
-from typing import TYPE_CHECKING, Optional, Union
+from typing import Optional, Union
 
 from pydantic import Field, HttpUrl
 
-if TYPE_CHECKING:
-    from .._session import GitHubSession
-
 from async_py_octocat.common import is_url, parse_repo_from
 
+from . import _repository
+from ._interactive import Interactive
 from ._plan import Plan
-from ._response import RestResponse
 
 __all__ = ["User"]
 
 
-class User(RestResponse):
+class User(Interactive):
 
     """User profile data wrapper & validator.
 
@@ -66,32 +64,26 @@ class User(RestResponse):
     collaborators: Optional[int]
     two_factor_authentication: Optional[bool]
     plan: Optional[Plan]
-    # internal library attributes
-    _session: Optional["GitHubSession"]
 
-    async def repo(self, name_or_url: Union[str, HttpUrl]) -> Repository:
+    async def repo(
+        self, name_or_url: Union[str, HttpUrl]
+    ) -> _repository.Repository:
         return await self._fetch_repository(name_or_url)
 
-    async def repository(self, name_or_url: Union[str, HttpUrl]) -> Repository:
+    async def repository(
+        self, name_or_url: Union[str, HttpUrl]
+    ) -> _repository.Repository:
         return await self._fetch_repository(name_or_url)
 
     async def _fetch_repository(
         self, name_or_url: Union[str, HttpUrl]
-    ) -> Repository:
-        assert self._session is not None, "Session was not set."
+    ) -> _repository.Repository:
         # decide whether url string or just name was given
         str_guarantee = str(name_or_url)
         if is_url(str_guarantee):
             repo_name = parse_repo_from(str_guarantee).repo
         else:
             repo_name = str_guarantee
-        # acquire resources from endpoint
-        async with self._session as session:
-            repo = await session.get_repo(self.login, repo_name)
+        repo = await self.get_session().get_repo(self.login, repo_name)
 
         return repo
-
-
-from ._repository import Repository  # noqa: E402
-
-User.update_forward_refs()

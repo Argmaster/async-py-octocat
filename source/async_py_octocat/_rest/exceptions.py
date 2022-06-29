@@ -6,6 +6,8 @@ __all__ = [
     "NotModified304",
     "Forbidden403",
     "NotFound404",
+    "SessionNotAvailable",
+    "SessionNotClosed",
 ]
 
 
@@ -26,4 +28,16 @@ class Forbidden403(ConnectionError):
 
 
 class NotFound404(ConnectionError):
+    pass
+
+
+class SessionError(RuntimeError):
+    pass
+
+
+class SessionNotAvailable(SessionError):
+    pass
+
+
+class SessionNotClosed(SessionError):
     pass

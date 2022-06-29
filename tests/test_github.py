@@ -1,6 +1,12 @@
 import pytest
 
-from async_py_octocat import GitHub, Plan, Repository, User
+from async_py_octocat import (
+    GitHub,
+    Plan,
+    Repository,
+    SessionNotAvailable,
+    User,
+)
 
 ALT_USER: str = "Argmaster"
 REPO_NAME: str
@@ -78,3 +84,12 @@ class TestGitHub:
             repo = await user.repo("async-py-octocat")
 
         assert isinstance(repo, Repository), repo
+
+    @pytest.mark.asyncio()
+    async def test_fail_get_user_session_ended(
+        self, gh_username: str, gh_token_full: str
+    ):
+        async with GitHub(gh_username, gh_token_full) as client:
+            pass
+        with pytest.raises(SessionNotAvailable):
+            await client.user(ALT_USER)

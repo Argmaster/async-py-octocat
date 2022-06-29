@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pydantic import HttpUrl
 
 from ._response import RestResponse

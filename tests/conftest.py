@@ -17,7 +17,7 @@ def pytest_addoption(parser: pytest.Parser):  # pragma: no cover
 def pytest_configure(config: pytest.Config):  # pragma: no cover
     global GH_USERNAME
     temp = config.getoption("--gh-username")
-    assert isinstance(temp, str)
+    assert isinstance(temp, str), temp
     GH_USERNAME = temp
 
     global GH_TOKEN_FULL

@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+import hashlib
+from random import random
 from types import TracebackType
 from typing import Optional, Type
 
-import aiohttp
-
 from ._rest import GitHubSession, User
+
+SESSION_ATTR_NAME: str = hashlib.sha256(
+    str(random()).encode("utf-8")
+).hexdigest()
 
 
 class GitHub:
@@ -18,42 +22,25 @@ class GitHub:
 
     username: str
     token: str
-    token_auth: bool
+    is_token_auth: bool
+    session: GitHubSession
     _user: Optional[User]
-    _session: GitHubSession
 
     def __init__(
-        self, username: str, token: str, token_auth: bool = False
+        self, username: str, token: str, is_token_auth: bool = False
     ) -> None:
         self.username = username
         self.token = token
-        self.token_auth = token_auth
+        self.is_token_auth = is_token_auth
         self._user = None
-        self._session = self._get_session()
-
-    def _get_session(self) -> GitHubSession:
-        if self.token_auth:
-            return GitHubSession(
-                headers={
-                    "Accept": "application/vnd.github.v3+json",
-                    "Authorization": f"token {self.token}",
-                },
-            )
-        else:
-            return GitHubSession(
-                auth=aiohttp.BasicAuth(
-                    login=self.username, password=self.token
-                ),
-                headers={"Accept": "application/vnd.github.v3+json"},
-            )
+        self.session = GitHubSession(
+            self.username, self.token, self.is_token_auth
+        )
 
     async def __aenter__(self) -> GitHub:
-        await self._session.__aenter__()
-        await self._fetch_current_user()
+        await self.session.__aenter__()
+        self._user = await self.session.get_user()
         return self
-
-    async def _fetch_current_user(self) -> None:
-        self._user = await self._session.get_user()
 
     async def __aexit__(
         self,
@@ -61,14 +48,15 @@ class GitHub:
         exc_val: BaseException,
         exc_tb: TracebackType,
     ) -> None:
-        return await self._session.__aexit__(exc_type, exc_val, exc_tb)
+        retval = await self.session.__aexit__(exc_type, exc_val, exc_tb)
+        return retval
 
     async def user(self, username: Optional[str] = None) -> User:
         if username is None:
             if self._user is None:
-                await self._fetch_current_user()
+                self._user = await self.session.get_user()
             assert self._user is not None
             return self._user
         else:
-            user = await self._session.get_user(username)
+            user = await self.session.get_user(username)
             return user

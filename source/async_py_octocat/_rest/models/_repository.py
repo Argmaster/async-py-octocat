@@ -2,17 +2,15 @@ from __future__ import annotations
 
 from datetime import datetime
 from enum import Enum
-from typing import TYPE_CHECKING, List, Optional
+from typing import List, Optional
 
 from pydantic import HttpUrl
 
+from . import _user as user
+from ._interactive import Interactive
 from ._license import License
 from ._organization import Organization
 from ._perms import Permissions
-from ._response import RestResponse
-
-if TYPE_CHECKING:
-    from .._session import GitHubSession
 
 
 class Visibility(Enum):
@@ -20,12 +18,12 @@ class Visibility(Enum):
     PUBLIC = "public"
 
 
-class Repository(RestResponse):
+class Repository(Interactive):
     id: int  # noqa: A003
     node_id: str
     name: str
     full_name: str
-    owner: User
+    owner: user.User
     private: bool
     html_url: HttpUrl
     description: str
@@ -110,10 +108,3 @@ class Repository(RestResponse):
     organization: Optional[Organization]
     parent: Optional[Repository]
     source: Optional[Repository]
-    # internal library attributes
-    _session: Optional["GitHubSession"]
-
-
-from ._user import User  # noqa: E402
-
-Repository.update_forward_refs()
