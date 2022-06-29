@@ -11,27 +11,31 @@ __all__ = [
 ]
 
 
-class MovedPermanently301(ConnectionError):
+class ResponseError(Exception):
     pass
 
 
-class NotModified304(ConnectionError):
+class MovedPermanently301(ResponseError):
     pass
 
 
-class RequiresAuthentication401(ConnectionError):
+class NotModified304(ResponseError):
     pass
 
 
-class Forbidden403(ConnectionError):
+class RequiresAuthentication401(ResponseError):
     pass
 
 
-class NotFound404(ConnectionError):
+class Forbidden403(ResponseError):
     pass
 
 
-class SessionError(RuntimeError):
+class NotFound404(ResponseError):
+    pass
+
+
+class SessionError(Exception):
     pass
 
 

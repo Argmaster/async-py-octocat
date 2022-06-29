@@ -10,7 +10,7 @@ def test_is_url():
 def test_parse_name_from_url():
     assert parse_repo_from(
         "https://github.com/Argmaster/async-py-octocat.git"
-    ) == GHUrl(owner="Argmaster", repo="async-py-octoca")
+    ) == GHUrl(owner="Argmaster", repo="async-py-octocat")
 
     assert parse_repo_from("http://github.com/python-pillow/Pillow") == GHUrl(
         owner="python-pillow", repo="Pillow"

@@ -84,6 +84,6 @@ class User(Interactive):
             repo_name = parse_repo_from(str_guarantee).repo
         else:
             repo_name = str_guarantee
-        repo = await self.get_session().get_repo(self.login, repo_name)
+        repo = await self.get_gh_session().get_repo(self.login, repo_name)
 
         return repo

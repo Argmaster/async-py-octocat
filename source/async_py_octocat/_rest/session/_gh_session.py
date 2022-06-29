@@ -35,25 +35,26 @@ class GitHubSession(SessionBase):
             content = await response.text()
             if response.status == 401:
                 raise RequiresAuthentication401(content)
-            if response.status == 304:
+            if response.status == 304:  # pragma: no cover
                 raise NotModified304(content)
-            if response.status == 403:
+            if response.status == 403:  # pragma: no cover
                 raise Forbidden403(content)
+            if response.status == 404:
+                raise NotFound404(content)
             assert response.status == 200, response
         content_object = json.loads(content)
         return user.User(**content_object, gh_session_object=self)
 
     async def get_repo(self, owner: str, repo: str) -> repository.Repository:
-        async with self.client_session.get(
-            f"{GET_REPO}/{owner}/{repo}"
-        ) as response:
+        url = f"{GET_REPO}/{owner}/{repo}"
+        async with self.client_session.get(url) as response:
             content = await response.text()
-            if response.status == 301:
-                raise MovedPermanently301(content)
-            if response.status == 403:
-                raise Forbidden403(content)
-            if response.status == 404:
-                raise NotFound404(content)
+            if response.status == 301:  # pragma: no cover
+                raise MovedPermanently301(url, content)
+            if response.status == 403:  # pragma: no cover
+                raise Forbidden403(url, content)
+            if response.status == 404:  # pragma: no cover
+                raise NotFound404(url, content)
             assert response.status == 200, response
         content_object = json.loads(content)
         return repository.Repository(**content_object, gh_session_object=self)

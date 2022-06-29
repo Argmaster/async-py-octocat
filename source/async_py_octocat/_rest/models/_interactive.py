@@ -4,6 +4,7 @@ from typing import Optional
 
 from pydantic import Field
 
+from ...types import HasGHSessionProtocol
 from ..exceptions import SessionNotAvailable
 from ..session import GitHubSession
 from ._response import RestResponse
@@ -18,7 +19,7 @@ class Interactive(RestResponse):
     class Config(RestResponse.Config):
         keep_untouched = (*RestResponse.Config.keep_untouched, GitHubSession)
 
-    def get_session(self) -> GitHubSession:
+    def get_gh_session(self) -> GitHubSession:
         if self.gh_session_object is None:
             raise SessionNotAvailable(
                 "Session is not available, probably this object was "
@@ -27,5 +28,5 @@ class Interactive(RestResponse):
             )
         return self.gh_session_object
 
-    def bind_session(self, session: GitHubSession) -> None:
-        object.__setattr__(self, "gh_session_object", session)
+    def bind_gh_session(self, has_session: HasGHSessionProtocol) -> None:
+        self.__dict__["gh_session_object"] = has_session.get_gh_session()

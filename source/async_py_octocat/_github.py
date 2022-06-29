@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+from contextlib import AbstractAsyncContextManager
 from random import random
 from types import TracebackType
 from typing import Optional, Type
@@ -12,12 +13,17 @@ SESSION_ATTR_NAME: str = hashlib.sha256(
 ).hexdigest()
 
 
-class GitHub:
+class GitHub(AbstractAsyncContextManager):
     """Async GitHub client.
 
-    After instantiation this object should (but doesn't have to) be
-    awaited to verify credentials and download authenticated user
-    profile data. Awaiting this object return self (this client object).
+    All async calls to methods of this object and objects
+    created with calls to methods of instance of this object
+    should be done within async with code block.
+
+    Objects created by this objects are bound to this object
+    and are able to communicate with Github API only by this
+    object session (async with block) unless manually rebound to
+    different object.
     """
 
     username: str
@@ -44,16 +50,18 @@ class GitHub:
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException],
-        exc_val: BaseException,
-        exc_tb: TracebackType,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
     ) -> None:
-        retval = await self.session.__aexit__(exc_type, exc_val, exc_tb)
-        return retval
+        return await self.session.__aexit__(exc_type, exc_val, exc_tb)
+
+    def get_gh_session(self) -> GitHubSession:
+        return self.session
 
     async def user(self, username: Optional[str] = None) -> User:
         if username is None:
-            if self._user is None:
+            if self._user is None:  # pragma: no cover
                 self._user = await self.session.get_user()
             assert self._user is not None
             return self._user

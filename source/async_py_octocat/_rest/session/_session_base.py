@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import hashlib
+from contextlib import AbstractAsyncContextManager
 from random import random
 from types import TracebackType
-from typing import Any, Dict, Type, TypeVar, cast
+from typing import Any, Dict, Optional, Type, TypeVar, cast
 
 import aiohttp
 from aiohttp import ClientSession
@@ -20,7 +21,7 @@ SESSION_ATTR_NAME: str = hashlib.sha256(
 T = TypeVar("T", bound="SessionBase")
 
 
-class SessionBase:
+class SessionBase(AbstractAsyncContextManager):
 
     username: str
     token: str
@@ -78,6 +79,9 @@ class SessionBase:
             raise SessionNotAvailable("Session was not properly initialized.")
         return cast(ClientSession, session)
 
+    def get_gh_session(self: T) -> T:
+        return self
+
     async def del_client_session(self) -> None:
         session = self.get_client_session()
         if not session.closed:
@@ -92,12 +96,9 @@ class SessionBase:
 
     async def __aexit__(
         self,
-        exc_type: Type[BaseException],
-        exc_val: BaseException,
-        exc_tb: TracebackType,
+        exc_type: Optional[Type[BaseException]],
+        exc_val: Optional[BaseException],
+        exc_tb: Optional[TracebackType],
     ) -> None:
-        retval = await self.get_client_session().__aexit__(
-            exc_type, exc_val, exc_tb
-        )
+        await self.get_client_session().__aexit__(exc_type, exc_val, exc_tb)
         await self.del_client_session()
-        return retval

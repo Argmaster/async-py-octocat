@@ -1,10 +1,10 @@
 import re
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel
 
 _URL_PATTERN = re.compile(r"https?://.*")
 _URL_PARSE_PATTERN = re.compile(
-    r"https?://.*?github.*?/(?P<owner>.+?)/(?P<repo>..+)"
+    r"^https?://.*?github.*?/(?P<owner>.+?)/(?P<repo>.*?)(?:\.git)?(?:/.*)?$"
 )
 
 
@@ -19,11 +19,6 @@ class GHUrl(BaseModel):
 
     owner: str
     repo: str
-
-    @validator("repo")
-    @classmethod
-    def strip_git(cls, value: str) -> str:
-        return value.rstrip(".git")
 
 
 def parse_repo_from(url: str) -> GHUrl:
