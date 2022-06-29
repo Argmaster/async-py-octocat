@@ -3,7 +3,7 @@ from __future__ import annotations
 import hashlib
 from random import random
 from types import TracebackType
-from typing import Any, Dict, Type, TypeVar
+from typing import Any, Dict, Type, TypeVar, cast
 
 import aiohttp
 from aiohttp import ClientSession
@@ -49,6 +49,7 @@ class SessionBase:
     def _get_session_kwargs(
         self,
     ) -> Dict[str, Any]:
+        kwargs: Dict[str, Any]
         if self.is_token_auth:
             kwargs = {
                 "headers": {
@@ -75,7 +76,7 @@ class SessionBase:
         session = getattr(self, SESSION_ATTR_NAME, None)
         if session is None:
             raise SessionNotAvailable("Session was not properly initialized.")
-        return session
+        return cast(ClientSession, session)
 
     async def del_client_session(self) -> None:
         session = self.get_client_session()

@@ -1,4 +1,4 @@
-# async_py_octocat
+![Async PyOctocat](https://raw.githubusercontent.com/Argmaster/async-py-octocat/main/docs/img/bg.jpg)
 
 Async PyOctocat is a Python library for asynchronous interaction with GitHub
 API. I was pushed to create this library by the lack of an actively maintained
