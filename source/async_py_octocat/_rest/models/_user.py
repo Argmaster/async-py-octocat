@@ -68,11 +68,39 @@ class User(Interactive):
     async def repo(
         self, name_or_url: Union[str, HttpUrl]
     ) -> _repository.Repository:
+        """Request repository details for this user.
+        Alias: repository()
+
+        Parameters
+        ----------
+        name_or_url : Union[str, HttpUrl]
+            Repository name or full github link to repository,
+
+        Returns
+        -------
+        Repository
+            Repository wrapper object allowing for further interaction
+            wit Github API.
+        """
         return await self._fetch_repository(name_or_url)
 
     async def repository(
         self, name_or_url: Union[str, HttpUrl]
     ) -> _repository.Repository:
+        """Request repository details for this user.
+        Alias: repo()
+
+        Parameters
+        ----------
+        name_or_url : Union[str, HttpUrl]
+            Repository name or full github link to repository,
+
+        Returns
+        -------
+        Repository
+            Repository wrapper object allowing for further interaction
+            wit Github API.
+        """
         return await self._fetch_repository(name_or_url)
 
     async def _fetch_repository(
