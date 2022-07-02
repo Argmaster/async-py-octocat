@@ -6,7 +6,7 @@ from random import random
 from types import TracebackType
 from typing import Optional, Type
 
-from ._rest import GitHubSession, User
+from ._rest import GitHubSession, Repository, User
 
 SESSION_ATTR_NAME: str = hashlib.sha256(
     str(random()).encode("utf-8")
@@ -68,3 +68,6 @@ class GitHub(AbstractAsyncContextManager):
         else:
             user = await self.session.get_user(username)
             return user
+
+    async def repository(self, user_name: str, repo_name: str) -> Repository:
+        return await self.session.get_repo(user_name, repo_name)

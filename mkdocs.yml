@@ -1,4 +1,4 @@
-site_name: async_py_octocat docs
+site_name: Async PyOctocat docs
 theme:
   name: material
   palette:
@@ -15,8 +15,8 @@ theme:
         icon: material/weather-sunny
         name: Switch to light mode
 nav:
-  - Home: index.md
-  - Quick Start: quickstart.md
+  - Overview: index.md
+  - Quick Start: quick_start.md
   - Features Status: features_status.md
   - Reference:
       - class GitHub: "reference/github.md"
@@ -39,6 +39,7 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
+      linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:

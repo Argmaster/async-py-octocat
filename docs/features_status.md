@@ -5,8 +5,15 @@
 | Symbol | Meaning                                            |
 | ------ | -------------------------------------------------- |
 | ✅     | Available in last stable release                   |
-| ⏯️     | Coming in last stable release                      |
+| ⏯️     | Coming in next stable release                      |
 | ❌     | Not available any time soon unless by community PR |
+
+!!! info "Missing features"
+
+    You desperately need a feature which is not in the tables
+    below? You may decide to add it yourself and create a pull
+    request, your help in developing this project will be gladly
+    welcomed.
 
 ## Commits
 

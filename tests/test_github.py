@@ -93,3 +93,11 @@ class TestGitHub:
             pass
         with pytest.raises(SessionNotAvailable):
             await client.user(ALT_USER)
+
+    @pytest.mark.asyncio()
+    async def test_get_repository_direct(
+        self, gh_username: str, gh_token_full: str
+    ):
+        async with GitHub(gh_username, gh_token_full) as client:
+            repo = await client.repository("Argmaster", "async-py-octocat")
+            assert isinstance(repo, Repository)
