@@ -1,6 +1,9 @@
 site_name: Async PyOctocat docs
 theme:
   name: material
+  features:
+    - navigation.tracking
+    - navigation.instant
   palette:
     - scheme: default
       primary: cyan
@@ -16,6 +19,10 @@ theme:
         name: Switch to light mode
   logo: "img/logo_hc.png"
   favicon: "img/logo_hc.png"
+repo_url: "https://github.com/Argmaster/async-py-octocat"
+repo_name: Argmaster/async-py-octocat
+icon:
+  repo: fontawesome/brands/github
 nav:
   - Overview: index.md
   - Quick Start: quick_start.md
@@ -29,11 +36,11 @@ nav:
       - Documentation: "develop/docs.md"
       - Formatting code: "develop/formatting.md"
       - Quality checks: "develop/quality_checks.md"
+      - How to's:
+          - Set up tox for development: "howto/tox_devenv.md"
+          - Set up Visual Studio Code: "howto/set_up_vsc.md"
+          - Set up environment in VSC: "howto/env_in_vsc.md"
   - Features Status: features_status.md
-  - Development How to's:
-      - Set up tox for development: "howto/tox_devenv.md"
-      - Set up Visual Studio Code: "howto/set_up_vsc.md"
-      - Set up environment in VSC: "howto/env_in_vsc.md"
   - Changelog: changelog.md
   - License: license.md
 markdown_extensions:
@@ -63,3 +70,5 @@ plugins:
         python:
           options:
             docstring_style: numpy
+  - git-revision-date-localized:
+      enable_creation_date: true

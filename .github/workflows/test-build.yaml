@@ -54,3 +54,4 @@ jobs:
       - run: tox -e build-py38 -vv
       - run: tox -e build-py39 -vv
       - run: tox -e build-py310 -vv
+      - run: tox -e docs -vv
