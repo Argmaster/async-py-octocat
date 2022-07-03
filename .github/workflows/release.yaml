@@ -3,8 +3,7 @@ name: Create release tag
 on:
   push:
     tags:
-      - "*"
-    branches: [main]
+      - "v*"
   workflow_dispatch: {}
 
 jobs:

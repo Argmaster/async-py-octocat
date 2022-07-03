@@ -56,7 +56,7 @@ For full tutorial check out Quick Start section in our docs.
 ## Documentation
 
 Online documentation is available at
-[argmaster.github.io/async_py_octocat/](https://argmaster.github.io/async_py_octocat/)
+[argmaster.github.io/async-py-octocat/](https://argmaster.github.io/async-py-octocat/)
 
 To build docs locally run
 

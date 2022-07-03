@@ -1,8 +1,10 @@
-name: docs
+name: Deploy documentation
+
 on:
   push:
     branches:
       - main
+
 jobs:
   deploy_documentation:
     runs-on: ubuntu-latest
@@ -12,6 +14,6 @@ jobs:
         with:
           python-version: 3.9
 
-      - run: pip install -r requirements-docs.txt
+      - run: pip install -r requirements-dev.txt
 
-      - run: mkdocs gh-deploy --force
+      - run: tox -e docs-deploy
