@@ -48,10 +48,9 @@ jobs:
           architecture: "x64"
           cache: pip
 
-      - run: python -m pip install tox
+      - name: Install tox
+        run: |
+          pip install -r requirements-min.txt
 
-      - run: tox -e build-py37 -vv
-      - run: tox -e build-py38 -vv
-      - run: tox -e build-py39 -vv
-      - run: tox -e build-py310 -vv
+      - run: tox -e build -vv
       - run: tox -e docs -vv

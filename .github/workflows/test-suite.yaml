@@ -48,7 +48,9 @@ jobs:
           architecture: "x64"
           cache: pip
 
-      - run: python -m pip install tox
+      - name: Install tox
+        run: |
+          pip install -r requirements-min.txt
 
       - name: "Test suite on Python 3.7"
         run: tox -e py37 -vv -- --gh-username ${{ secrets.GH_USERNAME }} --gh-token-full ${{ secrets.GH_TOKEN_FULL }} --gh-token-limited ${{ secrets.GH_TOKEN_LIMITED }}

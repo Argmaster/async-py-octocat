@@ -6,6 +6,12 @@ and well documented asynchronous library that would allow quick and efficient
 high-level interaction with Github from code. I sincerely hope that one day
 this library can be said to be actively maintained and well documented.
 
+## Install
+
+```
+pip install async_py_octocat
+```
+
 ## Features
 
 Due to the extensiveness of the Github API, functionalities require incremental
