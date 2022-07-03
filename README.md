@@ -2,9 +2,9 @@
 
 Async PyOctocat is a Python library for asynchronous interaction with GitHub
 API. I was pushed to create this library by the lack of an actively maintained
-and well documented library that would allow quick and efficient high-level
-interaction with Github from code poses. I sincerely hope that one day this
-library can be said to be actively maintained and well documented.
+and well documented asynchronous library that would allow quick and efficient
+high-level interaction with Github from code. I sincerely hope that one day
+this library can be said to be actively maintained and well documented.
 
 ## Features
 

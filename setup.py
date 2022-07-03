@@ -60,16 +60,9 @@ SHORT_DESCRIPTION = (
 LONG_DESCRIPTION = fetch_utf8_content("README.md")
 LONG_DESCRIPTION_CONTENT_TYPE = "text/markdown"
 INSTALL_REQUIRES = fetch_requirements(REPOSITORY_ROOT_DIR / "requirements.txt")
-
 AUTHOR = "async_py_octocat team"
 AUTHOR_EMAIL = "argmaster.world@gmail.com"
 URL = "https://github.com/Argmaster/async_py_octocat"
-PACKAGES = find_packages(where="source")
-
-PACKAGE_DIR = {"": "source"}
-PACKAGE_PYTHON_MODULES = fetch_package_python_modules(SOURCE_DIR / "*.py")
-INCLUDE_PACKAGE_DATA = True
-ZIP_SAFE = False
 CLASSIFIERS = [
     # complete classifier list: http://pypi.python.org/pypi?%3Aaction=list_classifiers
     "Development Status :: 4 - Beta",
@@ -104,10 +97,10 @@ ENTRY_POINTS = {
 }
 PYTHON_REQUIREMENTS = ">=3.7"
 
-INTERNAL_LIB_DIR = Path("./build/source/internal/")
-
-MODULES = []
-PACKAGE_DATA = {}
+PACKAGES = find_packages(where="source")
+PACKAGE_DIR = {"": "source"}
+INCLUDE_PACKAGE_DATA = True
+ZIP_SAFE = False
 
 
 def run_setup_script():
@@ -122,20 +115,19 @@ def run_setup_script():
         author=AUTHOR,
         author_email=AUTHOR_EMAIL,
         url=URL,
-        packages=PACKAGES,
-        package_dir=PACKAGE_DIR,
-        py_modules=PACKAGE_PYTHON_MODULES,
-        include_package_data=INCLUDE_PACKAGE_DATA,
-        zip_safe=ZIP_SAFE,
+        keywords=KEYWORDS,
+        entry_points=ENTRY_POINTS,
         classifiers=CLASSIFIERS,
         project_urls=PROJECT_URLS,
-        keywords=KEYWORDS,
+        # requires
         python_requires=PYTHON_REQUIREMENTS,
         install_requires=INSTALL_REQUIRES,
         extras_require=EXTRAS_REQUIRE,
-        entry_points=ENTRY_POINTS,
-        ext_modules=MODULES,
-        package_data=PACKAGE_DATA,
+        # packaging stuff
+        packages=PACKAGES,
+        package_dir=PACKAGE_DIR,
+        include_package_data=INCLUDE_PACKAGE_DATA,
+        zip_safe=ZIP_SAFE,
     )
 
 

@@ -1,7 +1,9 @@
 # Quick Start
 
 Welcome to quick start section. We will explain here how to get started using
-the PyOctocat library.
+the PyOctocat library. Great efforts have been made to make the API as
+high-level, readable and intuitive as possible. Overall, we are happy with the
+results and hope that the behavior of this library will also appeal to users.
 
 ## Creating a GitHub client
 
@@ -47,10 +49,13 @@ if __name__ == "__main__":
 
 ## Interacting with Github API
 
-Now when you have created Github client object, active interaction (sending and
-receiving data) can only be done withing `#!python async with` block in
-`#!python async` function. All interaction, requiring internet access, outside
-`#!python async with`, will fail.
+!!! important
+
+    **ALL** interaction with Github API (sending and receiving data) can only be
+    done withing `#!python async with` block in `#!python async` function.
+
+    **All interaction, requiring internet access, outside `#!python async with`,
+    will either fail or finish with unexpected results.**
 
 ```python
 import asyncio

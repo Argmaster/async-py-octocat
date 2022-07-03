@@ -17,7 +17,7 @@ from ._rest import (
     User,
 )
 
-__version__ = "1.0.0"
+__version__ = "0.0.0"
 
 
 __all__: List[str] = [

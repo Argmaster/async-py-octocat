@@ -6,7 +6,10 @@ The format is based on
 [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project
 adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## \[22.6.28\] - 2022-06-28
+## \[0.0.0\] - 2022-07-03
 
-- Added User wrapper for accessing currently authorized user and other users
-- Added Repository wrapper for accessing repositories
+- Added GitHub client object for managing session and basic interaction with
+  Github API
+- Added User wrapper for accessing details of authorized and other users and
+  fetching associated data
+- Added Repository wrapper for accessing details of repositories owned by users
