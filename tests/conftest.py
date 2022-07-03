@@ -1,25 +1,34 @@
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import pytest
 
-from .cli_toggle import Behavior, register_toggle
-
-register_toggle(
-    cli_flag="benchmark",
-    cli_flag_doc="Run only tests marked as benchmarks.",
-    pytest_mark_name="benchmark",
-    pytest_mark_doc="Benchmark tests were not enabled explicitly.",
-    flag_behavior=Behavior.INCLUDE_WHEN_FLAG_AND_EXCLUDE_OTHERS,
-)
+GH_USERNAME: Optional[str] = None
+GH_TOKEN_FULL: Optional[str] = None
+GH_TOKEN_LIMITED: Optional[str] = None
 
 
 def pytest_addoption(parser: pytest.Parser):  # pragma: no cover
-    register_toggle.pytest_addoption(parser)
+    parser.addoption("--gh-username", default=None)
+    parser.addoption("--gh-token-full", default=None)
+    parser.addoption("--gh-token-limited", default=None)
 
 
 def pytest_configure(config: pytest.Config):  # pragma: no cover
-    register_toggle.pytest_configure(config)
+    global GH_USERNAME
+    temp = config.getoption("--gh-username")
+    assert isinstance(temp, str), temp
+    GH_USERNAME = temp
+
+    global GH_TOKEN_FULL
+    temp = config.getoption("--gh-token-full")
+    assert isinstance(temp, str)
+    GH_TOKEN_FULL = temp
+
+    global GH_TOKEN_LIMITED
+    temp = config.getoption("--gh-token-limited")
+    assert isinstance(temp, str)
+    GH_TOKEN_LIMITED = temp
 
 
 def pytest_collection_modifyitems(
@@ -27,7 +36,7 @@ def pytest_collection_modifyitems(
     config: pytest.Config,
     items: List[pytest.Item],
 ):  # pragma: no cover
-    register_toggle.pytest_collection_modifyitems(session, config, items)
+    ...
 
 
 @pytest.fixture(scope="session")
@@ -48,3 +57,21 @@ def source_dir(repo_dir: Path) -> Path:  # pragma: no cover
 @pytest.fixture(scope="session")
 def package_dir(source_dir: Path) -> Path:  # pragma: no cover
     return source_dir / "async_py_octocat"
+
+
+@pytest.fixture(scope="session")
+def gh_username() -> str:
+    assert isinstance(GH_USERNAME, str)
+    return GH_USERNAME
+
+
+@pytest.fixture(scope="session")
+def gh_token_full() -> str:
+    assert isinstance(GH_TOKEN_FULL, str)
+    return GH_TOKEN_FULL
+
+
+@pytest.fixture(scope="session")
+def gh_token_limited() -> str:
+    assert isinstance(GH_TOKEN_LIMITED, str)
+    return GH_TOKEN_LIMITED

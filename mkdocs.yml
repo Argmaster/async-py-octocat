@@ -1,35 +1,46 @@
-site_name: async_py_octocat docs
+site_name: Async PyOctocat docs
 theme:
   name: material
+  features:
+    - navigation.tracking
+    - navigation.instant
   palette:
     - scheme: default
-      primary: indygo
-      accent: indygo
+      primary: cyan
+      accent: cyan
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - scheme: slate
-      primary: blue
-      accent: blue
+      primary: teal
+      accent: teal
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+  logo: "img/logo_hc.png"
+  favicon: "img/logo_hc.png"
+repo_url: "https://github.com/Argmaster/async-py-octocat"
+repo_name: Argmaster/async-py-octocat
+icon:
+  repo: fontawesome/brands/github
 nav:
-  - Home: index.md
-  - Quantum Oscilator:
-      - Introduction: "quantum_oscilator/introduction.md"
-      - architecture: "quantum_oscilator/architecture.md"
-      - params: "quantum_oscilator/params.md"
+  - Overview: index.md
+  - Quick Start: quick_start.md
+  - Reference:
+      - class GitHub: "reference/github.md"
+      - class User: "reference/user.md"
+      - class Repository: "reference/repository.md"
   - Development:
       - Feature flow: "develop/feature.md"
       - Tox basics: "develop/tox_basics.md"
       - Documentation: "develop/docs.md"
       - Formatting code: "develop/formatting.md"
       - Quality checks: "develop/quality_checks.md"
-  - HowTo:
-      - Set up tox for development: "howto/tox_devenv.md"
-      - Set up Visual Studio Code: "howto/set_up_vsc.md"
-      - Set up environment in VSC: "howto/env_in_vsc.md"
+      - How to's:
+          - Set up tox for development: "howto/tox_devenv.md"
+          - Set up Visual Studio Code: "howto/set_up_vsc.md"
+          - Set up environment in VSC: "howto/env_in_vsc.md"
+  - Features Status: features_status.md
   - Changelog: changelog.md
   - License: license.md
 markdown_extensions:
@@ -38,6 +49,7 @@ markdown_extensions:
   - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
+      linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets
   - pymdownx.superfences:
@@ -53,3 +65,10 @@ plugins:
   - search
   - macros:
       include_dir: .
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+  - git-revision-date-localized:
+      enable_creation_date: true

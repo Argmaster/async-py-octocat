@@ -1,31 +1,27 @@
 from __future__ import annotations
 
-from typing import List
-
-from ._github import GitHub
-from ._rest import (
+from . import exceptions
+from .exceptions import (
     Forbidden403,
     MovedPermanently301,
     NotFound404,
     NotModified304,
-    Organization,
-    Plan,
-    Repository,
     RequiresAuthentication401,
     SessionNotAvailable,
     SessionNotClosed,
-    User,
 )
+from .models import License, Organization, Permissions, Plan, Repository, User
+from .session import GitHubSession
 
-__version__ = "0.0.0"
-
-
-__all__: List[str] = [
-    "GitHub",
+__all__ = [
+    "GitHubSession",
     "User",
     "Plan",
+    "exceptions",
     "Repository",
     "Organization",
+    "License",
+    "Permissions",
     "RequiresAuthentication401",
     "MovedPermanently301",
     "NotModified304",

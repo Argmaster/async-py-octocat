@@ -12,8 +12,8 @@ fail_under = 90
 omit =
     *migrations*
     *conftest.py*
-    *test_benchmarks_suite*
-    *cli_toggle.py
+    */cli_toggle.py
+    */types.py
 exclude_lines =
     # Have to re-enable the standard pragma
     pragma: no cover
@@ -28,6 +28,7 @@ exclude_lines =
 
     # Don't complain if non-runnable code isn't run:
     if 0:
+    if False:
     if __name__ == .__main__.:
 
     # Don't complain about abstract methods, they aren't run:
