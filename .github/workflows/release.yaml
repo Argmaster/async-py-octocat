@@ -1,4 +1,4 @@
-name: Create release tag
+name: Tag and push to PyPI
 
 on:
   push:

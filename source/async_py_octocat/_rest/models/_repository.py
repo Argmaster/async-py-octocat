@@ -11,11 +11,19 @@ from ._interactive import Interactive
 from ._license import License
 from ._organization import Organization
 from ._perms import Permissions
+from ._commit import Commit
+
+from backports.cached_property import cached_property
 
 
 class Visibility(Enum):
     PRIVATE = "private"
     PUBLIC = "public"
+
+
+class ListProxy(Interactive):
+    def commits(self) -> Commit:
+        ...
 
 
 class Repository(Interactive):
@@ -108,3 +116,10 @@ class Repository(Interactive):
     organization: Optional[Organization]
     parent: Optional[Repository]
     source: Optional[Repository]
+
+    @cached_property
+    def list(self) -> ListProxy:  # noqa: FNE002, A003
+        return ListProxy(gh_session_object=self.gh_session_object)
+
+    def commit(self, sha_or_tag: str) -> Commit:
+        ...

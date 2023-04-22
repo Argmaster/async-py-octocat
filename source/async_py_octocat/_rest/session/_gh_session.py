@@ -13,6 +13,8 @@ from ..exceptions import (
 )
 from ..models import _repository as repository
 from ..models import _user as user
+
+from ..models import _commit as commit
 from ._session_base import SessionBase
 
 __all__ = ["GitHubSession"]
@@ -58,3 +60,6 @@ class GitHubSession(SessionBase):
             assert response.status == 200, response
         content_object = json.loads(content)
         return repository.Repository(**content_object, gh_session_object=self)
+
+    def get_commits_list(self, owner: str, repo: str) -> commit.Commit:
+        ...

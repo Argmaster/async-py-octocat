@@ -20,4 +20,4 @@ class RestResponse(BaseModel):
         arbitrary_types_allowed: bool = True
         keep_untouched: Tuple[Any, ...] = (cached_property,)
         underscore_attrs_are_private: bool = True
-        copy_on_model_validation: bool = True
+        copy_on_model_validation: bool = False
